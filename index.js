@@ -22,18 +22,18 @@ const User = sequelize.define(
       validate: {
         len: [4, 16],
       },
-      get() {
-        const rawValue = this.getDataValue("username");
-        return rawValue.toUpperCase();
-      },
+    //   get() {
+    //     const rawValue = this.getDataValue("username");
+    //     return rawValue.toUpperCase();
+    //   },
     },
     password: {
       type: DataTypes.STRING,
-      set(value) {
-        const salt = bcrypt.genSaltSync(12);
-        const hash = bcrypt.hashSync(value, salt);
-        this.setDataValue("password", hash);
-      },
+    //   set(value) {
+    //     const salt = bcrypt.genSaltSync(12);
+    //     const hash = bcrypt.hashSync(value, salt);
+    //     this.setDataValue("password", hash);
+    //   },
     },
     age: {
       type: DataTypes.INTEGER,
@@ -67,7 +67,6 @@ const User = sequelize.define(
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,
       validate: {
         isEmail: true,
       },
@@ -76,17 +75,22 @@ const User = sequelize.define(
   {
     freezeTableName: true,
     timestamps: false,
+    validate : {
+        usernamePasswordMatch(){
+            if(this.username == this.password)throw new Error("Password and username cannot be same")
+        }
+    }
   }
 );
 
 User.sync({ alter: true })
   .then(() => {
     return User.create({
-      username: "SyedIzzan",
-      password: "Syed123",
+      username: "syed",
+      password: "syed",
       age:21,
-      description: "Account of Izzan",
-      email: "izzan@gmail.com",
+      description: "Account of syed",
+      email: "s1@gmail.com",
     });
     
   })
