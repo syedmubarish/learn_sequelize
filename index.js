@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const { DataTypes } = Sequelize;
+const { DataTypes, Op } = Sequelize;
 
 const sequelize = new Sequelize("sequelizetut", "root", "iamgroot", {
   dialect: "mysql",
@@ -41,8 +41,7 @@ const User = sequelize.define(
 User.sync({ alter: true })
   .then(() => {
     return User.findAll({
-      attributes : ['username',[sequelize.fn('SUM',sequelize.col('age')),'sum_age']],
-      group : ['username']
+        where : { [Op.or]:{username:"Thangal",age:32} }
     });
   })
   .then((data) => {
