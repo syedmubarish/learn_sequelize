@@ -62,7 +62,10 @@ const User = sequelize.define(
     },
     email:{
         type : DataTypes.STRING,
-        unique : true
+        unique : true,
+        validate:{
+            isEmail : true
+        }
     }
   },
   {
@@ -77,7 +80,7 @@ User.sync({ alter: true })
         {
             username:"Nidhal",
             password:"Nidhal123",
-            email : "nihal@gmail.com",
+            email : "niha",
             description: "Off to france"
         }
     );
