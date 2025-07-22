@@ -41,7 +41,14 @@ const User = sequelize.define(
 User.sync({ alter: true })
   .then(() => {
     return User.findAll({
-        where : { [Op.or]:{username:"Thangal",age:32} }
+      where: {
+        age: {
+          [Op.or]: {
+            [Op.lt]: 26,
+            [Op.eq]: null,
+          },
+        },
+      },
     });
   })
   .then((data) => {
