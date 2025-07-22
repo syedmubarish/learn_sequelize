@@ -40,12 +40,15 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.update(
-      {
-        username: "Pizza",
-      },
-      { where: { age: 42 } }
-    );
+    return User.update({password:"passyCut"},
+        {
+            where : 
+            {
+                age : {
+                    [Op.gt]:25
+                }
+            }
+        });
   })
   .then((data) => {
     console.log(data);
