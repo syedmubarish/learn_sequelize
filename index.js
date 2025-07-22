@@ -40,15 +40,16 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.findAll({attributes:[['username','surname'],['password','pwd']]})
-  })
-  .then((data)=>{
-    data.forEach(element => {
-        
-        console.log(element.toJSON());
+    return User.findAll({
+      attributes: {exclude :['age']} ,
+      where: { age: 25, username: "Thangal" },
     });
-    
+  })
+  .then((data) => {
+    data.forEach((element) => {
+      console.log(element.toJSON());
+    });
   })
   .catch((error) => {
-    console.log("Some error occured",error);
+    console.log("Some error occured", error);
   });
