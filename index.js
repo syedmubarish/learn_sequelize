@@ -1,6 +1,8 @@
 const Sequelize = require("sequelize");
 const { DataTypes, Op } = Sequelize;
 
+const bcrypt = require("bcrypt")
+
 const sequelize = new Sequelize("sequelizetut", "root", "iamgroot", {
   dialect: "mysql",
 });
@@ -19,9 +21,18 @@ const User = sequelize.define(
       validate: {
         len: [4, 16],
       },
+      get(){
+        const rawValue = this.getDataValue('username')
+        return rawValue.toUpperCase()
+      }
     },
     password: {
       type: DataTypes.STRING,
+      set(value){
+        const salt = bcrypt.genSaltSync(12)
+        const hash = bcrypt.hashSync(value,salt)
+        this.setDataValue('password',hash)
+      }
     },
     age: {
       type: DataTypes.INTEGER,
@@ -40,15 +51,16 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.findAndCountAll({
-      where: { age: 21 },
-      raw: true,
-    });
+    return User.create(
+        {
+            username : "John",
+            password : "John123"
+        }
+    );
   })
   .then((data) => {
-    const { count, rows } = data;
-    console.log(count);
-    console.log(rows);
+    console.log(data);
+    
   })
   .catch((error) => {
     console.log("Some error occured", error);
