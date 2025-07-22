@@ -41,7 +41,8 @@ const User = sequelize.define(
 User.sync({ alter: true })
   .then(() => {
     return User.findAll({
-      order : [['age','ASC']]
+      attributes : ['username',[sequelize.fn('SUM',sequelize.col('age')),'sum_age']],
+      group : ['username']
     });
   })
   .then((data) => {
