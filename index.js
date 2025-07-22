@@ -43,6 +43,7 @@ User.sync({ alter: true })
     return User.findAll({
       attributes: {exclude :['age']} ,
       where: { age: 25, username: "Thangal" },
+      limit : 2
     });
   })
   .then((data) => {
