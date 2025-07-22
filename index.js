@@ -40,14 +40,15 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.findAll({
-      where: sequelize.where(sequelize.fn('CHAR_LENGTH',sequelize.col('username')),4)
-    });
+    return User.update(
+      {
+        username: "Pizza",
+      },
+      { where: { age: 42 } }
+    );
   })
   .then((data) => {
-    data.forEach((element) => {
-      console.log(element.toJSON());
-    });
+    console.log(data);
   })
   .catch((error) => {
     console.log("Some error occured", error);
