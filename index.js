@@ -40,12 +40,15 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.max('age');
-    // return User.min('age');
-    // return User.sum('age');
+    return User.findAndCountAll({
+      where: { age: 21 },
+      raw: true,
+    });
   })
   .then((data) => {
-    console.log(data);
+    const { count, rows } = data;
+    console.log(count);
+    console.log(rows);
   })
   .catch((error) => {
     console.log("Some error occured", error);
