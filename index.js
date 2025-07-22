@@ -59,6 +59,10 @@ const User = sequelize.define(
         get(){
             return `${this.username} - ${this.description}`
         }
+    },
+    email:{
+        type : DataTypes.STRING,
+        unique : true
     }
   },
   {
@@ -69,10 +73,17 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.findOne({where : {username : "JohnDRockyfeller"}});
+    return User.create(
+        {
+            username:"Nidhal",
+            password:"Nidhal123",
+            email : "nihal@gmail.com",
+            description: "Off to france"
+        }
+    );
   })
   .then((data) => {
-    console.log(data.aboutUser);
+    console.log(data.toJSON());
   })
   .catch((error) => {
     console.log("Some error occured", error);
