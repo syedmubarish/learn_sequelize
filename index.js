@@ -38,6 +38,11 @@ const User = sequelize.define(
     age: {
       type: DataTypes.INTEGER,
       defaultValue: 18,
+      validate:{
+        isOld(value){
+            if(value<18) throw new Error("Not matured")
+        }
+      }
     },
     eligible: {
       type: DataTypes.BOOLEAN,
@@ -76,13 +81,14 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    const user = User.build({
-      username: "SyedMubarish",
+    return User.create({
+      username: "SyedIzzan",
       password: "Syed123",
-      description: "Account of syed",
-      email: "syed",
+      age:21,
+      description: "Account of Izzan",
+      email: "izzan@gmail.com",
     });
-    return user.validate()
+    
   })
   .then((data) => {
     console.log(data.toJSON());
