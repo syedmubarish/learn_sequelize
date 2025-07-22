@@ -41,9 +41,7 @@ const User = sequelize.define(
 User.sync({ alter: true })
   .then(() => {
     return User.findAll({
-      attributes: {exclude :['age']} ,
-      where: { age: 25, username: "Thangal" },
-      limit : 2
+      order : [['age','ASC']]
     });
   })
   .then((data) => {
