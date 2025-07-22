@@ -1,7 +1,8 @@
 const Sequelize = require("sequelize");
 const { DataTypes, Op } = Sequelize;
 
-const bcrypt = require("bcrypt")
+const zlib = require("node:zlib");
+const bcrypt = require("bcrypt");
 
 const sequelize = new Sequelize("sequelizetut", "root", "iamgroot", {
   dialect: "mysql",
@@ -21,18 +22,18 @@ const User = sequelize.define(
       validate: {
         len: [4, 16],
       },
-      get(){
-        const rawValue = this.getDataValue('username')
-        return rawValue.toUpperCase()
-      }
+      get() {
+        const rawValue = this.getDataValue("username");
+        return rawValue.toUpperCase();
+      },
     },
     password: {
       type: DataTypes.STRING,
-      set(value){
-        const salt = bcrypt.genSaltSync(12)
-        const hash = bcrypt.hashSync(value,salt)
-        this.setDataValue('password',hash)
-      }
+      set(value) {
+        const salt = bcrypt.genSaltSync(12);
+        const hash = bcrypt.hashSync(value, salt);
+        this.setDataValue("password", hash);
+      },
     },
     age: {
       type: DataTypes.INTEGER,
@@ -41,6 +42,17 @@ const User = sequelize.define(
     eligible: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
+    },
+    description: {
+      type: DataTypes.STRING,
+      set(value) {
+        const compressedData = zlib.deflateSync(value).toString('base64')
+        this.setDataValue("description",compressedData)
+      },
+      get(){
+        const value = this.getDataValue("description")
+        return zlib.inflateSync(Buffer.from(value,'base64')).toString()
+      }
     },
   },
   {
@@ -51,16 +63,14 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.create(
-        {
-            username : "John",
-            password : "John123"
-        }
-    );
+    return User.create({
+      username: "JohnDRockyfeller",
+      password: "JohnDRocky123",
+      description:"This is long paragraph!!!"
+    });
   })
   .then((data) => {
-    console.log(data);
-    
+    console.log(data.description);
   })
   .catch((error) => {
     console.log("Some error occured", error);
