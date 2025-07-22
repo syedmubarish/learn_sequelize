@@ -40,31 +40,14 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    console.log("Table synced according to model");
-    return User.bulkCreate(
-      [
-        {
-          username: "Thangal",
-          password: "thangalpass",
-          age: 25,
-          eligible: true,
-        },
-        {
-          username: "Tom vercity",
-          password: "Tommy",
-          age: 32,
-          eligible: false,
-        },
-      ],
-      { validate: true }
-    );
+    return User.findAll({attributes:[['username','surname'],['password','pwd']]})
   })
-
-  .then((data) => {
-    console.log("users saved");
-    data.forEach((element) => {
-      console.log(element.toJSON());
+  .then((data)=>{
+    data.forEach(element => {
+        
+        console.log(element.toJSON());
     });
+    
   })
   .catch((error) => {
     console.log("Some error occured",error);
