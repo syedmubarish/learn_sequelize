@@ -40,7 +40,7 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.destroy({where : {password:"passyCut"}});
+    return User.destroy({truncate : true});
   })
   .then((data) => {
     console.log(data);
