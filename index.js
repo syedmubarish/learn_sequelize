@@ -40,7 +40,9 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.destroy({truncate : true});
+    return User.max('age');
+    // return User.min('age');
+    // return User.sum('age');
   })
   .then((data) => {
     console.log(data);
