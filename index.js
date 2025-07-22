@@ -54,19 +54,19 @@ const User = sequelize.define(
         return zlib.inflateSync(Buffer.from(value, "base64")).toString();
       },
     },
-    aboutUser : {
-        type : DataTypes.VIRTUAL,
-        get(){
-            return `${this.username} - ${this.description}`
-        }
+    aboutUser: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return `${this.username} - ${this.description}`;
+      },
     },
-    email:{
-        type : DataTypes.STRING,
-        unique : true,
-        validate:{
-            isEmail : true
-        }
-    }
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
   },
   {
     freezeTableName: true,
@@ -76,14 +76,13 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.create(
-        {
-            username:"Nidhal",
-            password:"Nidhal123",
-            email : "niha",
-            description: "Off to france"
-        }
-    );
+    const user = User.build({
+      username: "SyedMubarish",
+      password: "Syed123",
+      description: "Account of syed",
+      email: "syed",
+    });
+    return user.validate()
   })
   .then((data) => {
     console.log(data.toJSON());
