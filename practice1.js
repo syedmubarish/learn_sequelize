@@ -39,12 +39,13 @@ const Student = sequelize.define(
 Student.sync({ alter: true })
   .then(() => {
     return Student.findAll({
-      attributes: [
-        "school_year",
-        [sequelize.fn("COUNT", sequelize.col("school_year")), "num_students"],
-      ],
-      group: ["school_year"],
-      order: [["num_students", "ASC"]],
+      attributes: ["name"],
+      where: {
+        [Op.or]: {
+          favorite_class: "Computer Science",
+          subscribed_to_bititude: true,
+        },
+      },
     });
   })
   .then((data) => {
