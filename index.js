@@ -46,14 +46,20 @@ const User = sequelize.define(
     description: {
       type: DataTypes.STRING,
       set(value) {
-        const compressedData = zlib.deflateSync(value).toString('base64')
-        this.setDataValue("description",compressedData)
+        const compressedData = zlib.deflateSync(value).toString("base64");
+        this.setDataValue("description", compressedData);
       },
-      get(){
-        const value = this.getDataValue("description")
-        return zlib.inflateSync(Buffer.from(value,'base64')).toString()
-      }
+      get() {
+        const value = this.getDataValue("description");
+        return zlib.inflateSync(Buffer.from(value, "base64")).toString();
+      },
     },
+    aboutUser : {
+        type : DataTypes.VIRTUAL,
+        get(){
+            return `${this.username} - ${this.description}`
+        }
+    }
   },
   {
     freezeTableName: true,
@@ -63,14 +69,10 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.create({
-      username: "JohnDRockyfeller",
-      password: "JohnDRocky123",
-      description:"This is long paragraph!!!"
-    });
+    return User.findOne({where : {username : "JohnDRockyfeller"}});
   })
   .then((data) => {
-    console.log(data.description);
+    console.log(data.aboutUser);
   })
   .catch((error) => {
     console.log("Some error occured", error);
