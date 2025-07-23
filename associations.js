@@ -35,16 +35,15 @@ sequelize
   .sync({ alter: true })
   .then(() => {
     //Working with updated table
-    return Country.findOne({ where: { countryName: "Germany" } });
+    return Country.create({
+      countryName: "USA",
+    });
   })
   .then((data) => {
-    country = data
-    return country.getCapital()
+    country = data;
+    country.createCapital({ capitalName: "Washington DC" });
   })
-  .then((data)=>{
-    console.log(data.toJSON());
-    
-  })
+
   .catch((err) => {
     console.log("Some error occured:", err);
   });
