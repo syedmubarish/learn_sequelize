@@ -27,23 +27,15 @@ const Capital = sequelize.define(
   { timestamps: false }
 );
 
-Country.hasOne(Capital);
-Capital.belongsTo(Country);
+Country.hasOne(Capital, { onDelete: "CASCADE" });
+Capital.belongsTo(Country, { onDelete: "CASCADE" });
 
 let capital, country;
 
 sequelize
   .sync({ alter: true })
   .then(() => {
-    return Country.findOne({ where: { countryName: "England" } });
-  })
-  .then((data) => {
-    country = data;
-    return Capital.findOne({ where: { capitalName: "London" } });
-  })
-  .then((data) => {
-    capital = data
-    capital.setCountry(country)
+    Country.destroy({where : { countryName : "Germany"}})
   })
 
   .catch((err) => {
