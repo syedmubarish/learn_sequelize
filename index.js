@@ -97,14 +97,14 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.destroy({ where: { user_id: 25 }});
+    return User.findAll({ where: {username : 'SyedIzzan'} });
   })
   .then((data) => {
-    console.log(data);
+    // console.log(data);
 
-    // data.forEach((element) => {
-    //   console.log(element.toJSON());
-    // });
+    data.forEach((element) => {
+      console.log(element.toJSON());
+    });
   })
   .catch((error) => {
     console.log("Some error occured", error);
