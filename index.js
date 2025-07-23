@@ -22,27 +22,27 @@ const User = sequelize.define(
       validate: {
         len: [4, 16],
       },
-    //   get() {
-    //     const rawValue = this.getDataValue("username");
-    //     return rawValue.toUpperCase();
-    //   },
+      //   get() {
+      //     const rawValue = this.getDataValue("username");
+      //     return rawValue.toUpperCase();
+      //   },
     },
     password: {
       type: DataTypes.STRING,
-    //   set(value) {
-    //     const salt = bcrypt.genSaltSync(12);
-    //     const hash = bcrypt.hashSync(value, salt);
-    //     this.setDataValue("password", hash);
-    //   },
+      //   set(value) {
+      //     const salt = bcrypt.genSaltSync(12);
+      //     const hash = bcrypt.hashSync(value, salt);
+      //     this.setDataValue("password", hash);
+      //   },
     },
     age: {
       type: DataTypes.INTEGER,
       defaultValue: 18,
-      validate:{
-        isOld(value){
-            if(value<18) throw new Error("Not matured")
-        }
-      }
+      validate: {
+        isOld(value) {
+          if (value < 18) throw new Error("Not matured");
+        },
+      },
     },
     eligible: {
       type: DataTypes.BOOLEAN,
@@ -75,27 +75,29 @@ const User = sequelize.define(
   {
     freezeTableName: true,
     timestamps: false,
-    validate : {
-        usernamePasswordMatch(){
-            if(this.username == this.password)throw new Error("Password and username cannot be same")
-        }
-    }
+    validate: {
+      usernamePasswordMatch() {
+        if (this.username == this.password)
+          throw new Error("Password and username cannot be same");
+      },
+    },
   }
 );
 
+function myfunc() {
+  console.log(`Running RAW sql`);
+}
+
 User.sync({ alter: true })
   .then(() => {
-    return User.create({
-      username: "syed",
-      password: "syed",
-      age:21,
-      description: "Account of syed",
-      email: "s1@gmail.com",
+    return sequelize.query(`SELECT * FROM user WHERE user_id = 28`, {
+      type: Sequelize.QueryTypes.SELECT,
+      model: User,
+      logging: myfunc,
     });
-    
   })
   .then((data) => {
-    console.log(data.toJSON());
+    console.log(data);
   })
   .catch((error) => {
     console.log("Some error occured", error);
