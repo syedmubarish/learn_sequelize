@@ -90,10 +90,11 @@ function myfunc() {
 
 User.sync({ alter: true })
   .then(() => {
-    return sequelize.query(`SELECT * FROM user WHERE user_id = 28`, {
+    return sequelize.query(`SELECT * FROM user WHERE user_id = :user_id`, {
       type: Sequelize.QueryTypes.SELECT,
       model: User,
       logging: myfunc,
+      replacements:{user_id:28}
     });
   })
   .then((data) => {
