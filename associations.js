@@ -27,39 +27,24 @@ const Capital = sequelize.define(
   { timestamps: false }
 );
 
-Country.hasOne(Capital)
+Country.hasOne(Capital);
+
+let capital, country;
 
 sequelize
   .sync({ alter: true })
   .then(() => {
     //Working with updated table
-    Country.bulkCreate([
-      {
-        countryName: "France",
-      },
-      {
-        countryName: "England",
-      },
-      {
-        countryName: "Germany",
-      },
-      {
-        countryName: "Spain",
-      },
-    ]);
-    Capital.bulkCreate([
-      {
-        capitalName: "Paris",
-      },
-      {
-        capitalName: "London",
-      },
-      {
-        capitalName: "Berlin",
-      },
-      {
-        capitalName: "Madrid",
-      },
-    ]);
+    return Country.findOne({ where: { countryName: "Germany" } });
   })
-  .catch();
+  .then((data) => {
+    country = data;
+    return Capital.findOne({ where: { capitalName: "Berlin" } });
+  })
+  .then((data)=>{
+    capital = data
+    country.setCapital(capital)
+  })
+  .catch((err) => {
+    console.log("Some error occured:", err);
+  });
