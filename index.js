@@ -91,20 +91,22 @@ function myfunc() {
 
 User.sync({ alter: true })
   .then(() => {
-    return sequelize.query(`SELECT * FROM user WHERE username = $1 OR username LIKE $2`, {
-      type: Sequelize.QueryTypes.SELECT,
-      model: User,
-      logging: myfunc,
-      bind:['Helloo','%Mufi%']
-    });
+    return sequelize.query(
+      `SELECT * FROM user WHERE username = $name1 OR username LIKE $name2`,
+      {
+        type: Sequelize.QueryTypes.SELECT,
+        model: User,
+        logging: myfunc,
+        bind: { name1: "Nihal", name2: "%fi" },
+      }
+    );
   })
   .then((data) => {
     // console.log(data);
-    
-    data.forEach(element => {
-        console.log(element.toJSON());
-        
-    }); 
+
+    data.forEach((element) => {
+      console.log(element.toJSON());
+    });
   })
   .catch((error) => {
     console.log("Some error occured", error);
