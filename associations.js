@@ -39,11 +39,11 @@ sequelize
   })
   .then((data) => {
     country = data;
-    return Capital.findOne({ where: { capitalName: "Paris" } });
+    return Capital.findOne({ where: { capitalName: "London" } });
   })
   .then((data) => {
     capital = data
-    country.setCapital(capital)
+    capital.setCountry(country)
   })
 
   .catch((err) => {
