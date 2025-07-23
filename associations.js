@@ -35,7 +35,15 @@ let capital, country;
 sequelize
   .sync({ alter: true })
   .then(() => {
-    Country.destroy({where : { countryName : "Germany"}})
+    return Country.findOne({ where: { countryName: "England" } });
+  })
+  .then((data) => {
+    country = data;
+    return Capital.findOne({ where: { capitalName: "Paris" } });
+  })
+  .then((data) => {
+    capital = data
+    country.setCapital(capital)
   })
 
   .catch((err) => {
