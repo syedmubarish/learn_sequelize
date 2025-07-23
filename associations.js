@@ -38,12 +38,12 @@ sequelize
     return Country.findOne({ where: { countryName: "Germany" } });
   })
   .then((data) => {
-    country = data;
-    return Capital.findOne({ where: { capitalName: "Berlin" } });
+    country = data
+    return country.getCapital()
   })
   .then((data)=>{
-    capital = data
-    country.setCapital(capital)
+    console.log(data.toJSON());
+    
   })
   .catch((err) => {
     console.log("Some error occured:", err);
