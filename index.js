@@ -97,7 +97,7 @@ const User = sequelize.define(
 
 User.sync({ alter: true })
   .then(() => {
-    return User.findAll({ where: {username : 'SyedIzzan'} });
+    return User.findAll({ where: {username : 'SyedIzzan'}, paranoid : false });
   })
   .then((data) => {
     // console.log(data);
