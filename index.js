@@ -56,6 +56,7 @@ const User = sequelize.define(
       },
       get() {
         const value = this.getDataValue("description");
+        if (!value) return null;
         return zlib.inflateSync(Buffer.from(value, "base64")).toString();
       },
     },
@@ -90,18 +91,18 @@ function myfunc() {
 
 User.sync({ alter: true })
   .then(() => {
-    return sequelize.query(`SELECT * FROM user WHERE user_id IN(:user_id)`, {
+    return sequelize.query(`SELECT * FROM user WHERE username LIKE :name`, {
       type: Sequelize.QueryTypes.SELECT,
       model: User,
       logging: myfunc,
-      replacements:{user_id:[28,30]}
+      replacements:{name:'s%'}
     });
   })
   .then((data) => {
     data.forEach(element => {
-        
         console.log(element.toJSON());
-    });
+        
+    }); 
   })
   .catch((error) => {
     console.log("Some error occured", error);
