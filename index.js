@@ -90,15 +90,18 @@ function myfunc() {
 
 User.sync({ alter: true })
   .then(() => {
-    return sequelize.query(`SELECT * FROM user WHERE user_id = :user_id`, {
+    return sequelize.query(`SELECT * FROM user WHERE user_id IN(:user_id)`, {
       type: Sequelize.QueryTypes.SELECT,
       model: User,
       logging: myfunc,
-      replacements:{user_id:28}
+      replacements:{user_id:[28,30]}
     });
   })
   .then((data) => {
-    console.log(data);
+    data.forEach(element => {
+        
+        console.log(element.toJSON());
+    });
   })
   .catch((error) => {
     console.log("Some error occured", error);
