@@ -51,7 +51,7 @@ let customer, product;
 sequelize
   .sync({ alter: true })
   .then(() => {
-    return Customer.destroy({ where: { customerName: "Spiderman" } });
+    return Product.destroy({ where: { productName: "Suit" } });
   })
   .then((data) => {
     console.log(data);
