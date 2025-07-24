@@ -46,23 +46,20 @@ const CustomerProduct = sequelize.define(
 Product.belongsToMany(Customer, { through: CustomerProduct });
 Customer.belongsToMany(Product, { through: CustomerProduct });
 
+let customer, product;
+
 sequelize
   .sync({ alter: true })
   .then(() => {
-    Customer.bulkCreate([
-      { customerName: "Ironman" },
-      { customerName: "Thor" },
-      { customerName: "Spiderman" },
-      { customerName: "Hawkeye" },
-    ]);
-    Product.bulkCreate([
-      { productName: "Mjolnir" },
-      { productName: "Suit" },
-      { productName: "Bow" },
-      { productName: "Storm Breaker" },
-      { productName: "Arrow" },
-      { productName: "Gadget" },
-    ]);
+    return Customer.findOne({ where: { customerName: "Spiderman" } });
+  })
+  .then((data) => {
+    customer = data;
+    return Product.findAll()
+  })
+  .then((data)=>{
+    product = data
+    customer.addProducts(product)
   })
   .catch((err) => {
     console.log("Some error occured : ", err);
