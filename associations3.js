@@ -51,15 +51,15 @@ let customer, product;
 sequelize
   .sync({ alter: true })
   .then(() => {
-    return Customer.findOne({ where: { customerName: "Spiderman" } });
+    return Product.findOne({ where: { productName: "Suit" } });
   })
   .then((data) => {
-    customer = data;
-    return Product.findAll()
+    product = data;
+    return Customer.findAll()
   })
   .then((data)=>{
-    product = data
-    customer.addProducts(product)
+    customer = data
+    product.addCustomers(customer)
   })
   .catch((err) => {
     console.log("Some error occured : ", err);
