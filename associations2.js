@@ -32,24 +32,20 @@ const Post = sequelize.define(
   }
 );
 
-User.hasMany(Post);
-Post.belongsTo(User);
+User.hasMany(Post, { onDelete: "CASCADE" });
+Post.belongsTo(User, { onDelete: "CASCADE" });
 
 let user, post;
 
 sequelize
   .sync({ alter: true })
   .then(() => {
-    return User.findOne({ where: { username: "Ironman" } });
-  })
-  .then((data) => {
-    user = data 
-    return Post.findOne()
+    return User.destroy({ where: { username: "Ironman" } });
   })
   .then((data)=>{
-    post = data
-    return user.removePosts(post)
+    console.log(data);
+    
   })
   .catch((err) => {
-    console.log("Some error occured");
+    console.log("Some error occured",err);
   });
