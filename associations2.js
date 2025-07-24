@@ -35,57 +35,20 @@ const Post = sequelize.define(
 User.hasMany(Post);
 Post.belongsTo(User);
 
+let user, post;
+
 sequelize
   .sync({ alter: true })
   .then(() => {
-    User.bulkCreate([
-      {
-        username: "Ironman",
-        password: "Mark5",
-      },
-      {
-        username: "Spiderman",
-        password: "Spidey123",
-      },
-      {
-        username: "Hulk",
-        password: "BannerSmash",
-      },
-      {
-        username: "Thor",
-        password: "Mjolnir",
-      },
-    ]);
-
-    Post.bulkCreate([
-      {
-        post: "We are avengers",
-      },
-      {
-        post: "We are avengers",
-      },
-      {
-        post: "We are avengers",
-      },
-      {
-        post: "We are avengers",
-      },
-      {
-        post: "We are avengers",
-      },
-      {
-        post: "We are avengers",
-      },
-      {
-        post: "We are avengers",
-      },
-      {
-        post: "We are avengers",
-      },
-      {
-        post: "We are avengers",
-      },
-    ]);
+    return User.findOne({ where: { username: "Ironman" } });
+  })
+  .then((data) => {
+    user = data 
+    return Post.findAll()
+  })
+  .then((data)=>{
+    post = data
+    user.addPosts(post)
   })
   .catch((err) => {
     console.log("Some error occured");
