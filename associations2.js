@@ -44,12 +44,11 @@ sequelize
   })
   .then((data) => {
     user = data 
-    return user.countPosts()
+    return Post.findOne()
   })
   .then((data)=>{
-    console.log(data);
-    
-    
+    post = data
+    return user.removePosts(post)
   })
   .catch((err) => {
     console.log("Some error occured");
